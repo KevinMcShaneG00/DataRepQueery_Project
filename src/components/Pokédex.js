@@ -3,13 +3,13 @@ import axios from 'axios';
 
 function Pokédex() {
 
-    const [pokemonData, setPokemonData] = useState(null);
+    const [pokemonList, setPokemonList] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/pok%C3%A9dex');
-                setPokemonData(response.data);
+                setPokemonList(response.data.results);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -18,17 +18,16 @@ function Pokédex() {
         fetchData();
     }, []);
 
-
-
     return (
         <div>
-            {pokemonData && (
-                <div>
-                    <h2>{pokemonData.name}</h2>
-                    <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
-                    <p>Height: {pokemonData.height}</p>
-                    <p>Weight: {pokemonData.weight}</p>
-                </div>
+            {pokemonList ? (
+                <ul>
+                    {pokemonList.map((pokemon, index) => (
+                        <li key={index}>{pokemon.name}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Loading...</p>
             )}
         </div>
     );

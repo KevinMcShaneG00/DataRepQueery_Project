@@ -10,10 +10,9 @@ app.use(cors());
 // Handle GET request for Pokemon data
 //note that é = %C3%A9 and is automatically converted in the http req
 app.get('/pok%C3%A9dex', async (req, res) => {
-    const data = await axios.get('https://pokeapi.co/api/v2/pokemon/1')
+    const data = await axios.get('https://pokeapi.co/api/v2/pokemon')
         .then((data) => {
             res.json(data.data)
-            console.log(data);
         })
         .catch();
 });
