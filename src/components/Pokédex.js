@@ -8,7 +8,7 @@ function Pokédex() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://pokeapi.co/api/v2/pokemon/1');
+                const response = await axios.get('http://localhost:4000/pok%C3%A9dex');
                 setPokemonData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
