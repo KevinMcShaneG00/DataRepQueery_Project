@@ -1,11 +1,38 @@
 const express = require('express')
 const axios = require('axios')
 const cors = require('cors'); // allow localhost:3000 to access port 4000 resources
+const mongoose = require('mongoose');
 const app = express()
 const port = 4000
 
 //Use CORS middleware
 app.use(cors());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+//SET UP MONGODB
+//mongoDB atlas credentials
+//username: admin
+//password: admin
+
+main().catch(err => console.log(err));
+
+//paste our connection key in here
+async function main() {
+    await mongoose.connect('mongodb+srv://admin:admin@clusterproject.rub1qk6.mongodb.net/?retryWrites=true&w=majority');
+}
+
+//map how our database is layed out 
+const schema = new mongoose.Schema({
+    name:String
+})
+
+const databaseModel = mongoose.model('usersPokemon', schema);
 
 // Handle GET request for Pokemon data
 //note that é = %C3%A9 and is automatically converted in the http req
@@ -66,6 +93,11 @@ app.get('/pok%C3%A9dex', async (req, res) => {
             console.error('Error:', error);
             res.status(500).json({ error: 'Failed to fetch Pokémon data' });
         });
+});
+
+app.get('/Encounter', async(req, res)=>{
+    let pokemon = await databaseModel.find({});
+    res.send(pokemon);
 });
 
 app.listen(port, () => {
