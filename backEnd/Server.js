@@ -15,6 +15,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+//body parser for post method
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
+
 //SET UP MONGODB
 //mongoDB atlas credentials
 //username: admin
@@ -29,7 +34,8 @@ async function main() {
 
 //map how our database is layed out 
 const schema = new mongoose.Schema({
-    name:String
+    pokemonName:String,
+    image:String
 })
 
 const databaseModel = mongoose.model('usersPokemon', schema);
@@ -90,7 +96,7 @@ app.get('/pok%C3%A9dex', async (req, res) => {
             res.json({ allPokemon, pokemonImages });
         })
         .catch((error) => {
-            console.error('Error:', error);
+            console.error('Server.js error', error);
             res.status(500).json({ error: 'Failed to fetch Pokémon data' });
         });
 });
@@ -98,6 +104,31 @@ app.get('/pok%C3%A9dex', async (req, res) => {
 app.get('/Encounter', async(req, res)=>{
     let pokemon = await databaseModel.find({});
     res.send(pokemon);
+});
+
+app.get('/encounter:pokemonID', async(req, res)=>{
+    //strip the colon from req.body.pokemonID 
+    //before adding to the url and making the request using substring
+    //make a method that receives an pokemon ID and returns data for that ID
+    console.log(req.params.pokemonID.substring(1, req.params.pokemonID.length));
+    await axios.get('https://pokeapi.co/api/v2/pokemon/' + req.params.pokemonID.substring(1, req.params.pokemonID.length))
+    .then((response)=>{
+        res.send(response.data);
+    })
+    .catch((error)=>{
+        console.log("/encounter:pokemonID" + error);
+    });
+});
+
+app.post('/catchpokemon', (req, res)=>{
+    //add to the database
+    console.log(req.body);//log book object passed in from create.js
+    databaseModel.create({//create a new document extracing details from the form
+        pokemonName: req.body.pokemonName,
+        image: req.body.image
+    })//then and catch for the promise
+    .then(()=>{res.send("pokemon caught")})
+    .catch(()=>{res.send("pokemon NOT caught")})
 });
 
 app.listen(port, () => {

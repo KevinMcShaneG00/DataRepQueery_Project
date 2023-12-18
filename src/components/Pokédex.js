@@ -51,7 +51,7 @@ function Pokédex() {
                         {pokemonData.allPokemon.map((pokemon, index) => (
 
                             //if the index Mod6 = 0 is true it is a multiple of 6
-                            index % 6 == 0 ? (
+                            index % 6 === 0 ? (
                                 //make a row
                                 <tr key={index}>
 
