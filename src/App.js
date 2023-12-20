@@ -12,6 +12,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Home from './components/Home';
 import Pokédex from './components/Pokédex';
 import Encounter from './components/Encounter';
+import PCBox from './components/PCBox';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Nav className="me-auto">
               <Nav.Link href="/pokédex">Pokédex</Nav.Link>
               <Nav.Link href="/encounter">Encounter</Nav.Link>
+              <Nav.Link href="/PCBox">PC</Nav.Link>
             </Nav>
           </Container>
         </Navbar>
@@ -30,6 +32,7 @@ function App() {
           <Route path='/' element={<Home></Home>}></Route>
           <Route path='/pokédex' element={<Pokédex></Pokédex>}></Route>
           <Route path='/encounter' element={<Encounter></Encounter>}></Route>
+          <Route path='/PCBox' element={<PCBox></PCBox>}></Route>
         </Routes>
       </div>
     </BrowserRouter>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 
 function Encounter() {
+
     //generate a random number to pick a pokemon
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     function getRandomForID() {
@@ -13,12 +14,17 @@ function Encounter() {
         //variables
         let min = 1;
         let max = 400;
+
+        //generate random
         let randomNumber = Math.round(Math.random() * (max - min) + 1);
         console.log(randomNumber);
+
+        //back to method call
         return randomNumber;
     }
-    //generate sets and gets for post variables
-    const [pokemon, setPokemon] = useState(null);
+
+    //generate sets and gets for useEffect
+    const [pokemon, setPokemon] = useState('');
     const [pokemonName, setPokemonName] = useState('');
     const [image, setImage] = useState('');
     const [randomID, setRandomID] = useState('');
@@ -50,7 +56,6 @@ function Encounter() {
                 var id = getRandomForID();
                 setRandomID(id);
             
-
                 console.log('http://localhost:4000/encounter:' + id)
                 axios.get('http://localhost:4000/encounter:' + id)
                     .then(
