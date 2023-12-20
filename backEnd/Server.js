@@ -143,6 +143,13 @@ app.get('/encounter:pokemonID', async(req, res)=>{
     });
 });
 
+app.delete('/release/:id', async(req, res) => {
+    console.log("Delete: "+req.params.id);//print id of book that is being deleted
+
+    let release = await databaseModel.findByIdAndDelete(req.params.id);//do the delete
+    res.send(release);//book.js
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
