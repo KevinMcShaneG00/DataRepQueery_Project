@@ -34,20 +34,27 @@ async function main() {
 }
 
 //map how our database is layed out 
-const schema = new mongoose.Schema({
-    pokemonName:String,
-    image:String
+const pokemonSchema = new mongoose.Schema({
+    pokemonName: String,
+    image: String
 })
 
-//use the schema above for the collection usersPokemon
-const databaseModel = mongoose.model('usersPokemon', schema);
+const trainerSchema = new mongoose.Schema({
+    name: String,
+    favPokemon: String,
+    mood: String
+})
+
+//make a database model to create/read/edit methods for the database
+const pokemonModel = mongoose.model('usersPokemon', pokemonSchema);
+const trainerModel = mongoose.model('trainerProfiles', trainerSchema);
 
 //Handle GET request for Pokemon data from the API
 //note that é = %C3%A9 and is automatically converted in the http req
 app.get('/pok%C3%A9dex', async (req, res) => {
     let allPokemon = [];
     //first url in the api
-    let nextUrl = 'https://pokeapi.co/api/v2/pokemon'; 
+    let nextUrl = 'https://pokeapi.co/api/v2/pokemon';
 
     //limit the amount of data requested from the api to prevent 
     //ECONNRESET error with the api server
@@ -55,25 +62,25 @@ app.get('/pok%C3%A9dex', async (req, res) => {
 
     const fetchData = () => {
         return axios.get(nextUrl)
-        .then((response) => {
-            //to add results to allPokemon, use allPokemon.push, but because .push()expects a single element to be added
-            //we must split up the 20 records in the results array using ...
-            allPokemon.push(...response.data.results);
-            
-            //next url from api
-            nextUrl = response.data.next;
+            .then((response) => {
+                //to add results to allPokemon, use allPokemon.push, but because .push()expects a single element to be added
+                //we must split up the 20 records in the results array using ...
+                allPokemon.push(...response.data.results);
 
-            //Update the count of pokemon received by getting th length of the results array
-            count += response.data.results.length; 
+                //next url from api
+                nextUrl = response.data.next;
 
-            if (nextUrl && count < 400) {
-                //get more if limit has not been reached and if there is more to get
-                return fetchData(); 
-            }
-        })
-        .catch((error)=>{
-            console.log("fetchData()" + error);
-        });
+                //Update the count of pokemon received by getting th length of the results array
+                count += response.data.results.length;
+
+                if (nextUrl && count < 400) {
+                    //get more if limit has not been reached and if there is more to get
+                    return fetchData();
+                }
+            })
+            .catch((error) => {
+                console.log("fetchData()" + error);
+            });
     };
 
     fetchData()
@@ -107,47 +114,62 @@ app.get('/pok%C3%A9dex', async (req, res) => {
 });
 
 //add to the database
-app.post('/catchpokemon', (req, res)=>{
+app.post('/catchpokemon', (req, res) => {
     //log book object passed in from create.js
     console.log(req.body);
 
     //create a new document extracing details from the request
-    databaseModel.create({
+    pokemonModel.create({
         pokemonName: req.body.pokemonName,
         image: req.body.image
     })//then and catch for the promise
-    .then(()=>{res.send("pokemon caught")})
-    .catch(()=>{res.send("pokemon NOT caught")})
+        .then(() => { res.send("pokemon caught") })
+        .catch(() => { res.send("pokemon NOT caught") })
+});
+
+//add to the Trainers database
+app.post('/addTrainer', (req, res) => {
+    //log book object passed in from create.js
+    console.log(req.body);
+
+    //create a new document extracing details from the request
+    trainerModel.create({
+        name: req.body.name,
+        favPokemon: req.body.favPokemon,
+        mood: req.body.mood
+    })//then and catch for the promise
+        .then(() => { res.send("profile added") })
+        .catch(() => { res.send("profile NOT added") })
 });
 
 //find all pokemon in the database
-app.get('/PCBox', async(req, res)=>{
-    let pokemon = await databaseModel.find({});
+app.get('/PCBox', async (req, res) => {
+    let pokemon = await pokemonModel.find({});
     res.send(pokemon);
 });
 
 //search the database for specific pokemon
 
 //search for a specific pokemon from the api
-app.get('/encounter:pokemonID', async(req, res)=>{
+app.get('/encounter:pokemonID', async (req, res) => {
     //strip the colon from req.body.pokemonID 
     //before adding to the url and making the request using substring
     //make a method that receives an pokemon ID and returns data for that ID
     console.log(req.params.pokemonID.substring(1, req.params.pokemonID.length));
     await axios.get('https://pokeapi.co/api/v2/pokemon/' + req.params.pokemonID.substring(1, req.params.pokemonID.length))
-    .then((response)=>{
-        res.send(response.data);
-    })
-    .catch((error)=>{
-        console.log("/encounter:pokemonID" + error);
-    });
+        .then((response) => {
+            res.send(response.data);
+        })
+        .catch((error) => {
+            console.log("/encounter:pokemonID" + error);
+        });
 });
 
-app.delete('/release/:id', async(req, res) => {
-    console.log("Delete: "+req.params.id);//print id of book that is being deleted
+app.delete('/release/:id', async (req, res) => {
+    console.log("Delete: " + req.params.id);//print id of book that is being deleted
 
-    let release = await databaseModel.findByIdAndDelete(req.params.id);//do the delete
-    res.send(release);//book.js
+    let release = await pokemonModel.findByIdAndDelete(req.params.id);//do the delete
+    res.send(release);
 })
 
 app.listen(port, () => {

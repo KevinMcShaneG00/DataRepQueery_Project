@@ -24,6 +24,20 @@ function PCBox() {
         }, []
     );
 
+    const reloadData = () => {
+        axios.get('http://localhost:4000/PCBox')//get data from server.js
+                .then(
+                    (response) => {
+                        setPokemonArray(response.data)
+                    }
+                )
+                .catch(
+                    (error) => {
+                        console.log(error);
+                    }
+                )
+    }
+
     const makeCards = () => {
         //resource I used to learn about the map method
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
@@ -35,6 +49,12 @@ function PCBox() {
                     <Card.Footer><Button variant="danger" onClick={(e)=>{
                         e.preventDefault();
                         axios.delete('http://localhost:4000/release/'+pokemon._id)
+                        .then(()=>{
+                            reloadData();
+                        })
+                        .catch((error)=>{
+                            console.log("can't delete: " + error);
+                        });
                     }}>Release</Button></Card.Footer>
                 </Card>
             </div>

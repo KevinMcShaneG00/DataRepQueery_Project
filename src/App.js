@@ -9,10 +9,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 //imported components
-import Home from './components/Home';
 import Pokédex from './components/Pokédex';
 import Encounter from './components/Encounter';
 import PCBox from './components/PCBox';
+import TrainerProfile from './components/TrainerProfile';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
       <div className="App">
         <Navbar bg="dark" data-bs-theme="dark">
           <Container>
-            <Navbar.Brand href="/">Home</Navbar.Brand>
+            <Navbar.Brand href="/">Trainer Profile</Navbar.Brand>
             <Nav className="me-auto">
               <Nav.Link href="/pokédex">Pokédex</Nav.Link>
               <Nav.Link href="/encounter">Encounter</Nav.Link>
@@ -29,7 +29,7 @@ function App() {
           </Container>
         </Navbar>
         <Routes>
-          <Route path='/' element={<Home></Home>}></Route>
+          <Route path='/' element={<TrainerProfile></TrainerProfile>}></Route>
           <Route path='/pokédex' element={<Pokédex></Pokédex>}></Route>
           <Route path='/encounter' element={<Encounter></Encounter>}></Route>
           <Route path='/PCBox' element={<PCBox></PCBox>}></Route>
