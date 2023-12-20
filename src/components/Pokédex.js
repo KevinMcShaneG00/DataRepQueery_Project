@@ -38,48 +38,25 @@ function Pokédex() {
         fetchData();
     }, []);
 
+    const makeCards = () => {
+        return pokemonData.allPokemon.map((pokemon, index) => (
+            <div key={index} style={{ width: '200px' }}>
+                <Card>
+                    <Card.Header>{pokemon.name}</Card.Header>
+                    <Card.Img src={pokemonData.pokemonImages[index]} alt={pokemon.name} />
+                </Card>
+            </div>
+        ));
+    }
+
     return (
-        //use the flex model to center the page
-        //https://www.w3schools.com/css/css3_flexbox_container.asp
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <table style={{ textAlign: 'center' }}>
-                {pokemonData ? (
-                    // if pokemon is fetched
-                    <div>
-                        {/* itterate over all elements with map */}
-                        {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map */}
-                        {pokemonData.allPokemon.map((pokemon, index) => (
-
-                            //if the index Mod6 = 0 is true it is a multiple of 6
-                            index % 6 === 0 ? (
-                                //make a row
-                                <tr key={index}>
-
-                                    {/* then add 6 cards to the row by looping 6 times using map */}
-                                    {[0, 1, 2, 3, 4, 5].map((i) => (
-
-                                        //index+i explanation: the outer loops incremental value plus this loops incremental value
-                                        //for example index = 18, then when i=0, index+i=18 and as i increases to 5 index+i=23, then the loop drops
-                                        //then the first loop increments index to 24 and the process repeats
-                                        <td key={index + i}>
-                                            {pokemonData.allPokemon[index + i] && (
-                                                <Card style={{ width: '200px' }}>
-                                                    <Card.Header>{pokemonData.allPokemon[index + i].name}</Card.Header>
-                                                    <Card.Img src={pokemonData.pokemonImages[index + i]} alt={pokemonData.allPokemon[index + i].name} />
-                                                </Card>
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ) : null //leave false value empty
-                        ))}
-                    </div>
-                ) : (
-                    //if pokemonData is null
-                    <p>Loading...</p>
-                )}
-            </table>
-        </div >
+        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {pokemonData ? (
+                makeCards()
+            ) : (
+                <p>loading</p>
+            )}
+        </div>
     );
 }
 
