@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 //imported components
 import Pokédex from './components/Pokédex';
@@ -22,13 +23,25 @@ function App() {
       <div className="App">
         <Navbar bg="dark" data-bs-theme="dark">
           <Container>
-            <Navbar.Brand href="/">Trainer Profile</Navbar.Brand>
+            <Nav className="justify-content-center, flex-column, text-center">
+              <Navbar.Brand style={{ color: 'white' }}>Pokemon Project</Navbar.Brand>
+              <NavDropdown title="Trainer Profiles section">
+                <NavDropdown.Item href="/">Trainer Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/ViewAllTrainers">View All Trainers</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="Pokemon section">
+                <NavDropdown.Item href="/pokédex">pokédex</NavDropdown.Item>
+                <NavDropdown.Item href="/encounter">encounter</NavDropdown.Item>
+                <NavDropdown.Item href="/PCBox">PC</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            {/* <Navbar.Brand href="/">Trainer Profile</Navbar.Brand>
             <Nav className="me-auto">
               <Nav.Link href="/ViewAllTrainers">View All Trainers</Nav.Link>
               <Nav.Link href="/pokédex">Pokédex</Nav.Link>
               <Nav.Link href="/encounter">Encounter</Nav.Link>
               <Nav.Link href="/PCBox">PC</Nav.Link>
-            </Nav>
+            </Nav> */}
           </Container>
         </Navbar>
         <Routes>
