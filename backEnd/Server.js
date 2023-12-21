@@ -148,7 +148,17 @@ app.get('/PCBox', async (req, res) => {
     res.send(pokemon);
 });
 
-//search the database for specific pokemon
+app.get('/ViewAllTrainers', async (req, res) => {
+    let trainers = await trainerModel.find({});
+    res.send(trainers);
+});
+
+//find a specific trainer by id
+app.get('/trainer/:id', async(req, res) => {
+    let trainer = await trainerModel.findById(req.params.id);
+    res.send(trainer);
+});
+
 
 //search for a specific pokemon from the api
 app.get('/encounter:pokemonID', async (req, res) => {
@@ -165,11 +175,28 @@ app.get('/encounter:pokemonID', async (req, res) => {
         });
 });
 
+//delete a pokemon from the database
 app.delete('/release/:id', async (req, res) => {
     console.log("Delete: " + req.params.id);//print id of book that is being deleted
 
     let release = await pokemonModel.findByIdAndDelete(req.params.id);//do the delete
     res.send(release);
+})
+
+//delete a trainer profile
+app.delete('/deleteTrainer/:id', async (req, res) => {
+    console.log("Delete: " + req.params.id);//print id of book that is being deleted
+
+    let deleteTrainer = await trainerModel.findByIdAndDelete(req.params.id);//do the delete
+    res.send(deleteTrainer);
+})
+
+//edit a trainer
+app.put('/EditTrainer/:id', async(req, res) => {
+    console.log("update:" + req.params.id);
+    
+    let trainer = await trainerModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    res.send(trainer);//resend to book.js to change the mapping
 })
 
 app.listen(port, () => {
