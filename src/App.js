@@ -25,31 +25,24 @@ function App() {
           <Container>
             <Nav className="justify-content-center, flex-column, text-center">
               <Navbar.Brand style={{ color: 'white' }}>Pokemon Project</Navbar.Brand>
-              <NavDropdown title="Trainer Profiles section">
-                <NavDropdown.Item href="/">Trainer Profile</NavDropdown.Item>
-                <NavDropdown.Item href="/ViewAllTrainers">View All Trainers</NavDropdown.Item>
-              </NavDropdown>
               <NavDropdown title="Pokemon section">
-                <NavDropdown.Item href="/pokédex">pokédex</NavDropdown.Item>
+                <NavDropdown.Item href="/">pokédex</NavDropdown.Item>
                 <NavDropdown.Item href="/encounter">encounter</NavDropdown.Item>
-                <NavDropdown.Item href="/PCBox">PC</NavDropdown.Item>
+                <NavDropdown.Item href="/pc">PC</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="Trainer Profiles section">
+                <NavDropdown.Item href="/addTrainer">Trainer Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/viewAllTrainers">View All Trainers</NavDropdown.Item>
               </NavDropdown>
             </Nav>
-            {/* <Navbar.Brand href="/">Trainer Profile</Navbar.Brand>
-            <Nav className="me-auto">
-              <Nav.Link href="/ViewAllTrainers">View All Trainers</Nav.Link>
-              <Nav.Link href="/pokédex">Pokédex</Nav.Link>
-              <Nav.Link href="/encounter">Encounter</Nav.Link>
-              <Nav.Link href="/PCBox">PC</Nav.Link>
-            </Nav> */}
           </Container>
         </Navbar>
         <Routes>
-          <Route path='/' element={<TrainerProfile></TrainerProfile>}></Route>
-          <Route path='/ViewAllTrainers' element={<ViewAllTrainers></ViewAllTrainers>}></Route>
-          <Route path='/pokédex' element={<Pokédex></Pokédex>}></Route>
+          <Route path='/addTrainer' element={<TrainerProfile></TrainerProfile>}></Route>
+          <Route path='/viewAllTrainers' element={<ViewAllTrainers></ViewAllTrainers>}></Route>
+          <Route path='/' element={<Pokédex></Pokédex>}></Route>
           <Route path='/encounter' element={<Encounter></Encounter>}></Route>
-          <Route path='/PCBox' element={<PCBox></PCBox>}></Route>
+          <Route path='/pc' element={<PCBox></PCBox>}></Route>
           <Route path='/EditTrainer/:id' element={<EditTrainer></EditTrainer>}></Route>
         </Routes>
       </div>

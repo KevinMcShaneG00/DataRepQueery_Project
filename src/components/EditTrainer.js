@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { set } from 'mongoose';
 
 
 function EditTrainer() {
@@ -49,7 +48,7 @@ function EditTrainer() {
         axios.put('http://localhost:4000/EditTrainer/' + id, trainerDetails)
             .then((response) => {
                 console.log(response.data);
-                navigate('/ViewAllTrainers');
+                navigate('/viewAllTrainers');
             });
     }
 

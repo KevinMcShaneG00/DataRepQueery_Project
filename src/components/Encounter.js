@@ -80,7 +80,7 @@ function Encounter() {
         <div>
             {pokemon ? (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Card style={{ width: '200px' }}>
+                    <Card style={{ width: '400px' }}>
                         <Card.Header>{pokemon.species.name}</Card.Header>
                         <Card.Img src={pokemon.sprites.front_default} alt={pokemon.species.name} />
                         <button onClick={catchPokemon}>Catch</button>
