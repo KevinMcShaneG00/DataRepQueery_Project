@@ -11,7 +11,7 @@ function ViewAllTrainers() {
     useEffect(
         () => {
             const fetchData = async () => {
-                await axios.get('http://localhost:4000/ViewAllTrainers')
+                await axios.get('http://localhost:4000/viewAllTrainers')
                     .then((response) => {
                         //console.log('debug' + response.data);
                         setTrainerArray(response.data);
@@ -26,7 +26,7 @@ function ViewAllTrainers() {
     );
 
     const reloadData = () => {
-        axios.get('http://localhost:4000/ViewAllTrainers')
+        axios.get('http://localhost:4000/viewAllTrainers')
             .then((response) => {
                 //console.log('debug' + response.data);
                 setTrainerArray(response.data);

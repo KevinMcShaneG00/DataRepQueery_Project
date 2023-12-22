@@ -10,7 +10,7 @@ function PCBox() {
     useEffect(
         () => {
             const fetchData = async () => {
-                await axios.get('http://localhost:4000/PCBox')
+                await axios.get('http://localhost:4000/pcbox')
                     .then((response) => {
                         //console.log('debug' + response.data);
                         setPokemonArray(response.data);
@@ -25,7 +25,7 @@ function PCBox() {
     );
 
     const reloadData = () => {
-        axios.get('http://localhost:4000/PCBox')//get data from server.js
+        axios.get('http://localhost:4000/pcbox')//get data from server.js
             .then(
                 (response) => {
                     setPokemonArray(response.data)

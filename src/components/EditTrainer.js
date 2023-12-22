@@ -45,7 +45,7 @@ function EditTrainer() {
             mood: mood
         }
 
-        axios.put('http://localhost:4000/EditTrainer/' + id, trainerDetails)
+        axios.put('http://localhost:4000/editTrainer/' + id, trainerDetails)
             .then((response) => {
                 console.log(response.data);
                 navigate('/viewAllTrainers');

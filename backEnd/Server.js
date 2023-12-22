@@ -33,7 +33,7 @@ async function main() {
     await mongoose.connect('mongodb+srv://admin:admin@clusterproject.rub1qk6.mongodb.net/?retryWrites=true&w=majority');
 }
 
-//map how our database is layed out 
+//map how our databases are layed out 
 const pokemonSchema = new mongoose.Schema({
     pokemonName: String,
     image: String
@@ -45,12 +45,20 @@ const trainerSchema = new mongoose.Schema({
     mood: String
 })
 
-//make a database model to create/read/edit methods for the database
+//make a database model to access create/read/edit methods for the database
 const pokemonModel = mongoose.model('usersPokemon', pokemonSchema);
 const trainerModel = mongoose.model('trainerProfiles', trainerSchema);
 
+/*
+==========================================
+                GET METHODS
+==========================================
+*/ 
+
 //Handle GET request for Pokemon data from the API
 //note that é = %C3%A9 and is automatically converted in the http req
+//so for clarity this is actually http://localhost:4000/pokédex
+//however if you use the listener '/pokédex' a 404 error happens
 app.get('/pok%C3%A9dex', async (req, res) => {
     let allPokemon = [];
     //first url in the api
@@ -63,14 +71,14 @@ app.get('/pok%C3%A9dex', async (req, res) => {
     const fetchData = () => {
         return axios.get(nextUrl)
             .then((response) => {
-                //to add results to allPokemon, use allPokemon.push, but because .push()expects a single element to be added
+                //to add results to allPokemon, use allPokemon.push, but because .push() expects a single element to be added
                 //we must split up the 20 records in the results array using ...
                 allPokemon.push(...response.data.results);
 
                 //next url from api
                 nextUrl = response.data.next;
 
-                //Update the count of pokemon received by getting th length of the results array
+                //Update the count of pokemon received by getting the length of the results array
                 count += response.data.results.length;
 
                 if (nextUrl && count < 400) {
@@ -87,9 +95,11 @@ app.get('/pok%C3%A9dex', async (req, res) => {
         .then(() => {
             //when the fetchData() finishes this happpens
             //allPokemon.map acts as an iterator for that array
-            //and copies the necessary details from it into imageRequests[]
+            //and returns the necessary images from it into imageRequests[]
             const imageRequests = allPokemon.map(async (i) => {
                 //make a request with axios and wait in this part of the loop until we've got the url
+                //the reason we do this is to get the url from the api that contains a lot more info
+                //which includes the image
                 const specificPokemonData = await axios.get(i.url);
 
                 //get sprites and give them back to imageRequests[i]
@@ -97,10 +107,9 @@ app.get('/pok%C3%A9dex', async (req, res) => {
                 return sprites.front_default;
             });
 
-            // Promise .all details here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
-            // return the array of images
-            // images method variable stores a method with a promise so we handle it here
-            // It is essentially used to make the promises return in the order of the array[i]
+            //Promise.all details here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+            //as const specificPokemonData = await axios.get(i.url); is a promise unhandled and stored in imageRequests we have to use
+            //promise.all to resolve these requests in the order they are made in
             return Promise.all(imageRequests);
         })
         .then((pokemonImages) => {
@@ -112,6 +121,44 @@ app.get('/pok%C3%A9dex', async (req, res) => {
             res.status(500).json({ error: 'Failed to fetch Pokémon data' });
         });
 });
+
+//find all pokemon in the database
+app.get('/pcbox', async (req, res) => {
+    let pokemon = await pokemonModel.find({});
+    res.send(pokemon);
+});
+
+app.get('/viewAllTrainers', async (req, res) => {
+    let trainers = await trainerModel.find({});
+    res.send(trainers);
+});
+
+//find a specific trainer by id
+app.get('/trainer/:id', async(req, res) => {
+    let trainer = await trainerModel.findById(req.params.id);
+    res.send(trainer);
+});
+
+//search for a specific pokemon from the api
+app.get('/encounter:pokemonID', async (req, res) => {
+    //strip the colon from req.body.pokemonID 
+    //before adding to the url and making the request using substring
+    //make a method that receives an pokemon ID and returns data for that ID
+    console.log(req.params.pokemonID.substring(1, req.params.pokemonID.length));
+    await axios.get('https://pokeapi.co/api/v2/pokemon/' + req.params.pokemonID.substring(1, req.params.pokemonID.length))
+        .then((response) => {
+            res.send(response.data);
+        })
+        .catch((error) => {
+            console.log("/encounter:pokemonID" + error);
+        });
+});
+
+/*
+==========================================
+                POST METHODS
+==========================================
+*/
 
 //add to the database
 app.post('/catchpokemon', (req, res) => {
@@ -142,38 +189,11 @@ app.post('/addTrainer', (req, res) => {
         .catch(() => { res.send("profile NOT added") })
 });
 
-//find all pokemon in the database
-app.get('/PCBox', async (req, res) => {
-    let pokemon = await pokemonModel.find({});
-    res.send(pokemon);
-});
-
-app.get('/ViewAllTrainers', async (req, res) => {
-    let trainers = await trainerModel.find({});
-    res.send(trainers);
-});
-
-//find a specific trainer by id
-app.get('/trainer/:id', async(req, res) => {
-    let trainer = await trainerModel.findById(req.params.id);
-    res.send(trainer);
-});
-
-
-//search for a specific pokemon from the api
-app.get('/encounter:pokemonID', async (req, res) => {
-    //strip the colon from req.body.pokemonID 
-    //before adding to the url and making the request using substring
-    //make a method that receives an pokemon ID and returns data for that ID
-    console.log(req.params.pokemonID.substring(1, req.params.pokemonID.length));
-    await axios.get('https://pokeapi.co/api/v2/pokemon/' + req.params.pokemonID.substring(1, req.params.pokemonID.length))
-        .then((response) => {
-            res.send(response.data);
-        })
-        .catch((error) => {
-            console.log("/encounter:pokemonID" + error);
-        });
-});
+/*
+==========================================
+            DELETE METHODS
+==========================================
+*/
 
 //delete a pokemon from the database
 app.delete('/release/:id', async (req, res) => {
@@ -191,8 +211,14 @@ app.delete('/deleteTrainer/:id', async (req, res) => {
     res.send(deleteTrainer);
 })
 
+/*
+==========================================
+                PUT METHODS
+==========================================
+*/
+
 //edit a trainer
-app.put('/EditTrainer/:id', async(req, res) => {
+app.put('/editTrainer/:id', async(req, res) => {
     console.log("update:" + req.params.id);
     
     let trainer = await trainerModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
