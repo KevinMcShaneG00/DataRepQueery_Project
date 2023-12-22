@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 
 function ViewAllTrainers() {
-
+    //generate a variable and a set method using useState
     const [trainerArray, setTrainerArray] = useState([]);
 
+    //useEffect hook used to re-render data after changes are made and promises are fulfilled
     useEffect(
         () => {
             const fetchData = async () => {

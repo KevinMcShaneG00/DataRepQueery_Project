@@ -53,18 +53,20 @@ function EditTrainer() {
 
     //submit method
     const editTrainer = (e) => {
+        //prevent the default bahaviour of the event
         e.preventDefault();
 
+        //send info neatly to server with an object
         const trainerDetails = {
             name: name,
             favPokemon: favPokemon,
             mood: mood
         }
 
-        axios.put('http://localhost:4000/editTrainer/' + id, trainerDetails)
+        axios.put('http://localhost:4000/editTrainer/' + id, trainerDetails)//pass id as parameter and pass trainer details in the request body
             .then((response) => {
                 console.log(response.data);
-                navigate('/viewAllTrainers');
+                navigate('/viewAllTrainers');//put use back into //localhost/3000/viewAllTrainers
             });
     }
 

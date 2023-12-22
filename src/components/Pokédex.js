@@ -53,6 +53,7 @@ function Pokédex() {
     }
 
     return (
+        //the flex model is useful for diplaying structured content when you do not know how many cards there are going to be
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
             {/* ternary operator used to check if the pokemonData has been populated and that the promise is finished */}
             {pokemonData ? (

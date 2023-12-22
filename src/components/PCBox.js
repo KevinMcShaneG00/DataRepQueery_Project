@@ -5,8 +5,10 @@ import Button from 'react-bootstrap/Button';
 
 
 function PCBox() {
+    //generate a variable and a set method using useState
     const [pokemonArray, setPokemonArray] = useState([]);
 
+    //useEffect hook used to re-render data after changes are made and promises are fulfilled
     useEffect(
         () => {
             const fetchData = async () => {
@@ -50,9 +52,9 @@ function PCBox() {
                     <Card.Footer>
                         <Button variant="danger" onClick={(e) => {
                             e.preventDefault();
-                            axios.delete('http://localhost:4000/release/' + pokemon._id)
+                            axios.delete('http://localhost:4000/release/' + pokemon._id)//the ()=> function calls the delete function on server.js on click
                                 .then(() => {
-                                    reloadData();
+                                    reloadData();//the function above this helps show that the delete has worked for the user immediatly
                                 })
                                 .catch((error) => {
                                     console.log("can't delete: " + error);

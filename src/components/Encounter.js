@@ -15,6 +15,7 @@ function Encounter() {
     //this prevents the rerender of the page from changing what pokemon is drawn unnecessarily
     var useEffectUpdateCounter = 0;
 
+    //useEffect hook used to re-render data after changes are made and promises are fulfilled
     useEffect(
         () => {
             if (useEffectUpdateCounter == 0) {
@@ -22,7 +23,7 @@ function Encounter() {
                 setRandomID(id);
 
                 console.log('http://localhost:4000/encounter:' + id)
-                axios.get('http://localhost:4000/encounter:' + id)
+                axios.get('http://localhost:4000/encounter:' + id)//request to the server
                     .then(
                         (response) => {
                             //set the data here
