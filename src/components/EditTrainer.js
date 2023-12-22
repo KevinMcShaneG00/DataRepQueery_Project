@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-
 function EditTrainer() {
 
     // The useParams hook returns an object of key/value pairs of
@@ -35,23 +34,6 @@ function EditTrainer() {
         backgroundColor: 'pink'
     }
 
-    //submit method
-    const editTrainer = (e) => {
-        e.preventDefault();
-
-        const trainerDetails = {
-            name: name,
-            favPokemon: favPokemon,
-            mood: mood
-        }
-
-        axios.put('http://localhost:4000/editTrainer/' + id, trainerDetails)
-            .then((response) => {
-                console.log(response.data);
-                navigate('/viewAllTrainers');
-            });
-    }
-
     useEffect(
         () => {
             const fetchData = async () => {
@@ -68,6 +50,23 @@ function EditTrainer() {
             console.log('http://localhost:4000/trainer/' + id);
         }, []
     );
+
+    //submit method
+    const editTrainer = (e) => {
+        e.preventDefault();
+
+        const trainerDetails = {
+            name: name,
+            favPokemon: favPokemon,
+            mood: mood
+        }
+
+        axios.put('http://localhost:4000/editTrainer/' + id, trainerDetails)
+            .then((response) => {
+                console.log(response.data);
+                navigate('/viewAllTrainers');
+            });
+    }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
