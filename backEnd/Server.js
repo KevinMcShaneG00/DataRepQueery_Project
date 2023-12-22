@@ -124,10 +124,11 @@ app.get('/pok%C3%A9dex', async (req, res) => {
 
 //find all pokemon in the database
 app.get('/pcbox', async (req, res) => {
-    let pokemon = await pokemonModel.find({});
+    let pokemon = await pokemonModel.find({});//find query for all entries
     res.send(pokemon);
 });
 
+//find trainers
 app.get('/viewAllTrainers', async (req, res) => {
     let trainers = await trainerModel.find({});
     res.send(trainers);
@@ -135,7 +136,7 @@ app.get('/viewAllTrainers', async (req, res) => {
 
 //find a specific trainer by id
 app.get('/trainer/:id', async(req, res) => {
-    let trainer = await trainerModel.findById(req.params.id);
+    let trainer = await trainerModel.findById(req.params.id);//return the record where _id matches
     res.send(trainer);
 });
 
@@ -143,7 +144,6 @@ app.get('/trainer/:id', async(req, res) => {
 app.get('/encounter:pokemonID', async (req, res) => {
     //strip the colon from req.body.pokemonID 
     //before adding to the url and making the request using substring
-    //make a method that receives an pokemon ID and returns data for that ID
     console.log(req.params.pokemonID.substring(1, req.params.pokemonID.length));
     await axios.get('https://pokeapi.co/api/v2/pokemon/' + req.params.pokemonID.substring(1, req.params.pokemonID.length))
         .then((response) => {
@@ -162,7 +162,7 @@ app.get('/encounter:pokemonID', async (req, res) => {
 
 //add to the database
 app.post('/catchpokemon', (req, res) => {
-    //log book object passed in from create.js
+    //log object sent in from the body of the request
     console.log(req.body);
 
     //create a new document extracing details from the request
@@ -197,7 +197,7 @@ app.post('/addTrainer', (req, res) => {
 
 //delete a pokemon from the database
 app.delete('/release/:id', async (req, res) => {
-    console.log("Delete: " + req.params.id);//print id of book that is being deleted
+    console.log("Delete: " + req.params.id);//print id of object being deleted
 
     let release = await pokemonModel.findByIdAndDelete(req.params.id);//do the delete
     res.send(release);
@@ -205,9 +205,9 @@ app.delete('/release/:id', async (req, res) => {
 
 //delete a trainer profile
 app.delete('/deleteTrainer/:id', async (req, res) => {
-    console.log("Delete: " + req.params.id);//print id of book that is being deleted
+    console.log("Delete: " + req.params.id);//print id of object being deleted
 
-    let deleteTrainer = await trainerModel.findByIdAndDelete(req.params.id);//do the delete
+    let deleteTrainer = await trainerModel.findByIdAndDelete(req.params.id);//do the delete queery where _id matches the document
     res.send(deleteTrainer);
 })
 
@@ -221,8 +221,8 @@ app.delete('/deleteTrainer/:id', async (req, res) => {
 app.put('/editTrainer/:id', async(req, res) => {
     console.log("update:" + req.params.id);
     
-    let trainer = await trainerModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
-    res.send(trainer);//resend to book.js to change the mapping
+    let trainer = await trainerModel.findByIdAndUpdate(req.params.id, req.body, {new: true});//do the edit queery where _id matches the document
+    res.send(trainer);
 })
 
 app.listen(port, () => {
