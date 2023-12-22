@@ -37,6 +37,7 @@ function ViewAllTrainers() {
     }
 
     return (
+        //the flex model is useful for diplaying structured content when you do not know how many cards there are going to be
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
             {trainerArray.map((trainer, i) => (
                 <Card key={i} style={{ width: '300px' }}>

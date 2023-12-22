@@ -71,6 +71,8 @@ function EditTrainer() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             {trainerArray ? (
+                // run editTrainer when the type='submit' input is triggered
+                // set the values every time the input box changes
                 <form onSubmit={editTrainer} style={{ fontSize: '25px' }}>
                     <input placeholder={trainerArray.name} style={inputCss} onChange={(e) => setName(e.target.value)}></input><br></br>
                     <input placeholder={trainerArray.favPokemon} style={inputCss} onChange={(e) => setFavPokemon(e.target.value)}></input><br></br>

@@ -3,8 +3,10 @@ import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 
 function Pokédex() {
+    //generate a variable and a set method using useState
     const [pokemonData, setPokemonData] = useState(null);
 
+    //useEffect hook used to re-render data after changes are made and promises are fulfilled
     useEffect(() => {
         const fetchData = async () => {
             //get data from session storage
@@ -38,6 +40,7 @@ function Pokédex() {
         fetchData();
     }, []);
 
+    //method to return all of the cards with pokemon details for each record
     const makeCards = () => {
         return pokemonData.allPokemon.map((pokemon, index) => (
             <div key={index} style={{ width: '200px' }}>
@@ -51,6 +54,7 @@ function Pokédex() {
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {/* ternary operator used to check if the pokemonData has been populated and that the promise is finished */}
             {pokemonData ? (
                 makeCards()
             ) : (

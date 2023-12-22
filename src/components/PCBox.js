@@ -40,6 +40,7 @@ function PCBox() {
 
     const makeCards = () => {
         //resource I used to learn about the map method
+        //pokemon is the current record of the array being processed, index is self explanitory
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
         return pokemonArray.map((pokemon, index) => (
             <div key={index} style={{ width: '200px' }}>

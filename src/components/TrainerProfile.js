@@ -8,6 +8,7 @@ function TrainerProfile() {
     const [favPokemon, setFavPokemon] = useState("");
     const [mood, setMood] = useState("");
 
+    //variables containing css to seperate code somewhat and keep it neat
     const inputCss = {
         border: '2px solid blue',
         borderRadius: '20px',
@@ -31,6 +32,7 @@ function TrainerProfile() {
             mood: mood
         }
 
+        //add the trainer to the database
         axios.post('http://localhost:4000/addTrainer', trainerDetails)
         .then(()=>{
             alert("Profile added successfully");

@@ -12,8 +12,9 @@ function Encounter() {
 
     //set counter to ensure that the random and rquest is only made once
     //every time the page is reloaded or saved it sets counter to 0
+    //this prevents the rerender of the page from changing what pokemon is drawn unnecessarily
     var useEffectUpdateCounter = 0;
-    
+
     useEffect(
         () => {
             if (useEffectUpdateCounter == 0) {
@@ -69,7 +70,7 @@ function Encounter() {
             image: image
         }
 
-        axios.post('http://localhost:4000/catchpokemon', pokeball)//send data with html promise
+        axios.post('http://localhost:4000/catchpokemon', pokeball)
             .then(() => {
                 //tell the user https://www.w3schools.com/js/js_popup.asp
                 alert("pokemon caught successfully");
